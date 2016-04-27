@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED( VERSION 3.0 )
+CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
 PROJECT( dc-viewer )
 
 set( OGRE_INC_DIR "${CMAKE_SOURCE_DIR}/build/ogre/sdk/include/OGRE" CACHE PATH "Path to Ogre sdk include directory" FORCE

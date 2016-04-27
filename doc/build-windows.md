@@ -50,6 +50,7 @@ https://bitbucket.org/cabalistic/ogredeps
 * go to the folder dc-viewer/build/ogredeps and open OGREDEPS.sln in Visual Studio.
 * build the solution in Release and Debug configurations.
 * right click the INSTALL project and build, in Release and Debug.
+
 ---
 
 ### Building Ogre

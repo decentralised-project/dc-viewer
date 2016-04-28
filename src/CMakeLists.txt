@@ -3,6 +3,8 @@ cmake_policy(SET CMP0015 NEW)
 
 PROJECT( dc-viewer )
 
+set(EXECUTABLE_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/build/bin")
+
 set( Boost_USE_STATIC_LIBS ON ) 
 set( Boost_USE_MULTITHREADED ON )
 find_package( Boost COMPONENTS date_time thread atomic )

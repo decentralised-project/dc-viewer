@@ -8,7 +8,7 @@ set( Boost_USE_MULTITHREADED ON )
 find_package( Boost COMPONENTS date_time thread atomic )
 
 set( OGRE_STATIC TRUE ) 
-find_package( ogre )
+find_package( OGRE )
 
 set( OGRE_DEPENDENCIES_DIR "${CMAKE_SOURCE_DIR}/build/ogredeps/ogredeps" CACHE PATH "Path to Ogre deps directory" FORCE )
 set( OIS_INC_DIR "${CMAKE_SOURCE_DIR}/build/ogre/sdk/include/OIS" CACHE PATH "Path to Ogre sdk OIS include directory" FORCE )

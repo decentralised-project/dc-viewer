@@ -64,5 +64,8 @@ https://bitbucket.org/sinbad/ogre/
 * in "where to build the binaries" box, enter the path to the output folder (eg. c:\dc-viewer\build\ogre)
 * click the configure button.
 * Tick OGRE_STATIC, and set OGRE_DEPENDENCIES_DIR to c:/dc-viewer/build/ogredeps/ogredeps (where ogredeps installed itself to)
-* 
+* set the required environment variable with the commands below:
+```
+setx OGRE_HOME c:\dc-viewer\build\ogre\sdk /m
+```
 

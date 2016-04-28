@@ -1,4 +1,9 @@
 CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
 PROJECT( dc )
 
+set( OGRE_STATIC TRUE )
+set(CMAKE_MODULE_PATH
+  "${CMAKE_SOURCE_DIR}/CMake"
+)
+
 add_subdirectory(src)

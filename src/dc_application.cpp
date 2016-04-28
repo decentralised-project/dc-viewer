@@ -35,8 +35,8 @@ dc_application::~dc_application()
 
 bool dc_application::go()
 {
-	mRoot = new Ogre::Root(Ogre::BLANKSTRING, 
-						   Ogre::BLANKSTRING, 
+	mRoot = new Ogre::Root(Ogre::StringUtil::BLANK, 
+						   Ogre::StringUtil::BLANK,
 						   "dc.log");
 
 #ifdef WIN32

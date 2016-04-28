@@ -11,7 +11,6 @@ set( OGRE_STATIC TRUE )
 find_package( OGRE )
 
 set( OGRE_DEPENDENCIES_DIR "${CMAKE_SOURCE_DIR}/build/ogredeps/ogredeps" CACHE PATH "Path to Ogre deps directory" FORCE )
-set( OIS_INC_DIR "${CMAKE_SOURCE_DIR}/build/ogre/sdk/include/OIS" CACHE PATH "Path to Ogre sdk OIS include directory" FORCE )
 
 set( EXECUTABLE_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/build")
 
@@ -44,7 +43,7 @@ endif(WIN32)
 include_directories( 
     ${OGRE_INCLUDE_DIR} 
     ${VIEWER_ROOT_INC_FILES} 
-    ${OIS_INC_DIR} 
+    ${OIS_INCLUDE_DIR} 
     ${Boost_INCLUDE_DIRS}
     ${INCLUDE_DIRS}
 )

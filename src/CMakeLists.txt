@@ -20,14 +20,33 @@ FILE( GLOB VIEWER_ROOT_SRC_FILES "${CMAKE_SOURCE_DIR}/src/*.cpp" )
 
 source_group( src FILES ${VIEWER_ROOT_INC_FILES} ${VIEWER_ROOT_SRC_FILES} )
 
-include_directories( 
-	${OGRE_INCLUDE_DIR} 
-	${VIEWER_ROOT_INC_FILES} 
-	${OIS_INC_DIR} 
-	${Boost_INCLUDE_DIRS}
+if(WIN32)
+    set( INCLUDE_DIRS
 	${OGRE_RenderSystem_Direct3D9_INCLUDE_DIR} 
 	${OGRE_RenderSystem_Direct3D11_INCLUDE_DIR} 
 	${OGRE_RenderSystem_GL_INCLUDE_DIR} 
+    )
+    set( LIBS
+	debug ${OGRE_RenderSystem_Direct3D9_LIBRARY_DBG} optimized ${OGRE_RenderSystem_Direct3D9_LIBRARY_REL}
+	debug ${OGRE_RenderSystem_Direct3D11_LIBRARY_DBG} optimized ${OGRE_RenderSystem_Direct3D11_LIBRARY_REL}
+	debug ${OGRE_RenderSystem_GL_LIBRARY_DBG} optimized ${OGRE_RenderSystem_GL_LIBRARY_REL}
+    )
+else()
+    set( INCLUDE_DIRS
+	${OGRE_RenderSystem_GL_INCLUDE_DIR} 
+    )
+
+    set( LIBS
+	debug ${OGRE_RenderSystem_GL_LIBRARY_DBG} optimized ${OGRE_RenderSystem_GL_LIBRARY_REL}
+    )
+endif(WIN32)
+
+include_directories( 
+    ${OGRE_INCLUDE_DIR} 
+    ${VIEWER_ROOT_INC_FILES} 
+    ${OIS_INC_DIR} 
+    ${Boost_INCLUDE_DIRS}
+    ${INCLUDE_DIRS}
 )
 
 link_directories( 
@@ -45,9 +64,7 @@ add_executable(
 target_link_libraries( 
 	dc-viewer 
 	debug ${OGRE_LIBRARY_DBG} optimized ${OGRE_LIBRARY_REL}
-	debug ${OGRE_RenderSystem_Direct3D9_LIBRARY_DBG} optimized ${OGRE_RenderSystem_Direct3D9_LIBRARY_REL}
-	debug ${OGRE_RenderSystem_Direct3D11_LIBRARY_DBG} optimized ${OGRE_RenderSystem_Direct3D11_LIBRARY_REL}
-	debug ${OGRE_RenderSystem_GL_LIBRARY_DBG} optimized ${OGRE_RenderSystem_GL_LIBRARY_REL}
+	${LIBS}
 	debug FreeImage_d optimized FreeImage
 	debug OIS_d optimized OIS
 	debug zlib_d optimized zlib

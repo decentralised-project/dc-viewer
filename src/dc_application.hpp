@@ -4,8 +4,10 @@
 #include <OgreRoot.h>
 #include <OgreWindowEventUtilities.h>
 #include <OgreFrameListener.h>
+#ifdef WIN32
 #include <OgreD3D9RenderSystem.h>
 #include <OgreD3D11RenderSystem.h>
+#endif
 #include <OgreGLRenderSystem.h>
 
 #include <OISEvents.h>

@@ -28,6 +28,8 @@ if(WIN32)
 	${OGRE_RenderSystem_GL_INCLUDE_DIR} 
     )
     set( LIBS
+	d3d11
+	dxgi
 	debug ${OGRE_RenderSystem_Direct3D9_LIBRARY_DBG} optimized ${OGRE_RenderSystem_Direct3D9_LIBRARY_REL}
 	debug ${OGRE_RenderSystem_Direct3D11_LIBRARY_DBG} optimized ${OGRE_RenderSystem_Direct3D11_LIBRARY_REL}
 	debug ${OGRE_RenderSystem_GL_LIBRARY_DBG} optimized ${OGRE_RenderSystem_GL_LIBRARY_REL}
@@ -66,18 +68,16 @@ target_link_libraries(
 	dcviewer 
 	debug ${OGRE_LIBRARY_DBG} optimized ${OGRE_LIBRARY_REL}
 	${LIBS}
-	debug FreeImage_d optimized FreeImage
+	debug ${FreeImage_LIBRARY_DBG} optimized ${FreeImage_LIBRARY_REL}
 	debug OIS_d optimized OIS
-	debug zlib_d optimized zlib
-	debug zziplib_d optimized zziplib
+	debug ${ZLIB_LIBRARY_DBG} optimized ${ZLIB_LIBRARY_REL}
+	debug ${ZZip_LIBRARY_DBG} optimized ${ZZip_LIBRARY_REL}
 	${DirectX9_LIBRARY}
 	${DirectX9_D3DX9_LIBRARY}
 	${DirectX9_DXERR_LIBRARY}
 	${DirectX9_DXGUID_LIBRARY}
-	d3d11
-	dxgi
-	opengl32 
-	glu32 
+	${OPENGL_gl_LIBRARY} 
+	${OPENGL_glu_LIBRARY} 
 )
 
 IF( WIN32 )

@@ -1,7 +1,7 @@
 CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
 cmake_policy(SET CMP0015 NEW)
 
-PROJECT( dc-viewer )
+PROJECT( dcviewer )
 
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/build/bin")
 
@@ -57,13 +57,13 @@ link_directories(
 )
 
 add_executable( 
-	dc-viewer 
+	dcviewer 
 	${VIEWER_ROOT_INC_FILES} 
 	${VIEWER_ROOT_SRC_FILES} 
 )
 
 target_link_libraries( 
-	dc-viewer 
+	dcviewer 
 	debug ${OGRE_LIBRARY_DBG} optimized ${OGRE_LIBRARY_REL}
 	${LIBS}
 	debug FreeImage_d optimized FreeImage

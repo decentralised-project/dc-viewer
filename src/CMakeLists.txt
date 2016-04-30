@@ -19,28 +19,39 @@ set( EXECUTABLE_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/build")
 FILE( GLOB VIEWER_ROOT_INC_FILES "${CMAKE_SOURCE_DIR}/src/*.hpp" )
 FILE( GLOB VIEWER_ROOT_SRC_FILES "${CMAKE_SOURCE_DIR}/src/*.cpp" )
 
+if(WIN32)
+FILE( GLOB WINRES_FILES
+    "${CMAKE_SOURCE_DIR}/src/resource.h"
+    "${CMAKE_SOURCE_DIR}/src/dcviewer.rc"
+)
+endif(WIN32)
+
+source_group( "" FILES ${WINRES_FILES} )
 source_group( src FILES ${VIEWER_ROOT_INC_FILES} ${VIEWER_ROOT_SRC_FILES} )
 
 if(WIN32)
     set( INCLUDE_DIRS
-	${OGRE_RenderSystem_Direct3D9_INCLUDE_DIR} 
-	${OGRE_RenderSystem_Direct3D11_INCLUDE_DIR} 
-	${OGRE_RenderSystem_GL_INCLUDE_DIR} 
+		${OGRE_RenderSystem_Direct3D9_INCLUDE_DIR} 
+		${OGRE_RenderSystem_Direct3D11_INCLUDE_DIR} 
+		${OGRE_RenderSystem_GL_INCLUDE_DIR} 
     )
     set( LIBS
-	d3d11
-	dxgi
-	debug ${OGRE_RenderSystem_Direct3D9_LIBRARY_DBG} optimized ${OGRE_RenderSystem_Direct3D9_LIBRARY_REL}
-	debug ${OGRE_RenderSystem_Direct3D11_LIBRARY_DBG} optimized ${OGRE_RenderSystem_Direct3D11_LIBRARY_REL}
-	debug ${OGRE_RenderSystem_GL_LIBRARY_DBG} optimized ${OGRE_RenderSystem_GL_LIBRARY_REL}
+		d3d11
+		dxgi
+		debug ${OGRE_RenderSystem_Direct3D9_LIBRARY_DBG} optimized ${OGRE_RenderSystem_Direct3D9_LIBRARY_REL}
+		debug ${OGRE_RenderSystem_Direct3D11_LIBRARY_DBG} optimized ${OGRE_RenderSystem_Direct3D11_LIBRARY_REL}
+		debug ${OGRE_RenderSystem_GL_LIBRARY_DBG} optimized ${OGRE_RenderSystem_GL_LIBRARY_REL}
     )
 else()
     set( INCLUDE_DIRS
-	${OGRE_RenderSystem_GL_INCLUDE_DIR} 
+		${OGRE_RenderSystem_GL_INCLUDE_DIR} 
     )
 
     set( LIBS
-	debug ${OGRE_RenderSystem_GL_LIBRARY_DBG} optimized ${OGRE_RenderSystem_GL_LIBRARY_REL}
+		${X11_X11_LIB}
+		dl
+		pthread
+		debug ${OGRE_RenderSystem_GL_LIBRARY_DBG} optimized ${OGRE_RenderSystem_GL_LIBRARY_REL}
     )
 endif(WIN32)
 
@@ -48,26 +59,29 @@ include_directories(
     ${OGRE_INCLUDE_DIR} 
     ${VIEWER_ROOT_INC_FILES} 
     ${OIS_INCLUDE_DIR} 
-    ${Boost_INCLUDE_DIRS}
+    ${Boost_INCLUDE_DIR}
     ${INCLUDE_DIRS}
 )
 
 link_directories( 
-	debug ${OGRE_LIB_OPT_DIR_D} optimized ${OGRE_LIB_OPT_DIR} 
 	${OGRE_DEPENDENCIES_DIR}/lib
-	debug ${Boost_LIBRARY_DIR_DEBUG} optimized ${Boost_LIBRARY_DIR_RELEASE}
 )
 
 add_executable( 
 	dcviewer 
 	${VIEWER_ROOT_INC_FILES} 
 	${VIEWER_ROOT_SRC_FILES} 
+	${WINRES_FILES}
 )
 
 target_link_libraries( 
 	dcviewer 
-	debug ${OGRE_LIBRARY_DBG} optimized ${OGRE_LIBRARY_REL}
 	${LIBS}
+	debug ${Boost_SYSTEM_LIBRARY_DEBUG} optimized ${Boost_SYSTEM_LIBRARY_RELEASE}
+	debug ${Boost_THREAD_LIBRARY_DEBUG} optimized ${Boost_THREAD_LIBRARY_RELEASE}
+	debug ${Boost_ATOMIC_LIBRARY_DEBUG} optimized ${Boost_ATOMIC_LIBRARY_RELEASE}
+	debug ${Boost_CHRONO_LIBRARY_DEBUG} optimized ${Boost_CHRONO_LIBRARY_RELEASE}
+	debug ${Boost_DATE_TIME_LIBRARY_DEBUG} optimized ${Boost_DATE_TIME_LIBRARY_RELEASE}
 	debug ${FreeImage_LIBRARY_DBG} optimized ${FreeImage_LIBRARY_REL}
 	debug OIS_d optimized OIS
 	debug ${ZLIB_LIBRARY_DBG} optimized ${ZLIB_LIBRARY_REL}
@@ -78,6 +92,7 @@ target_link_libraries(
 	${DirectX9_DXGUID_LIBRARY}
 	${OPENGL_gl_LIBRARY} 
 	${OPENGL_glu_LIBRARY} 
+	debug ${OGRE_LIBRARY_DBG} optimized ${OGRE_LIBRARY_REL}
 )
 
 IF( WIN32 )

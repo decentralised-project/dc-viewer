@@ -48,6 +48,13 @@ bool dc_application::go()
 
 	Ogre::Root::getSingleton().addRenderSystem(renderer);
 	renderer->setConfigOption("Full Screen", "No");
+	renderer->setConfigOption("Video Mode", "800 x 600 @ 32-bit colour");
+	//renderer->setConfigOption("Display Frequency", "50 Hz");
+	renderer->setConfigOption("FSAA", "16");
+	renderer->setConfigOption("Fixed Pipeline Enabled", "Yes");
+	//renderer->setConfigOption("RTT Preferred Mode", "FBO");
+	//renderer->setConfigOption("VSync", "No");
+	//renderer->setConfigOption("sRGB Gamma Conversion", "No");
 
 	Ogre::Root::getSingleton().setRenderSystem(renderer); 
 

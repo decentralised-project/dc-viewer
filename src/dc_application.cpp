@@ -10,6 +10,7 @@
 #include <OgreException.h>
 #include <OgreTextureManager.h>
 #include <OgreLogManager.h>
+#include "resource.h"
 
 dc_application::dc_application()
 	: mRoot(0),
@@ -62,6 +63,13 @@ bool dc_application::go()
 		return false;
 
 	mWindow = mRoot->initialise(true, "Decentralised");
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+	HWND hwnd;
+	mWindow->getCustomAttribute("WINDOW", (void*)&hwnd);
+	LONG iconID = (LONG)LoadIcon(GetModuleHandle(0), MAKEINTRESOURCE(IDI_ICON1));
+	SetClassLong(hwnd, GCL_HICON, iconID);
+#endif
 
 	Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
 	Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();

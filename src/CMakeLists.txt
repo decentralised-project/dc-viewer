@@ -36,11 +36,25 @@ if(WIN32)
 		${OGRE_RenderSystem_GL_INCLUDE_DIR} 
     )
     set( LIBS
-		d3d11
-		dxgi
-		debug ${OGRE_RenderSystem_Direct3D9_LIBRARY_DBG} optimized ${OGRE_RenderSystem_Direct3D9_LIBRARY_REL}
-		debug ${OGRE_RenderSystem_Direct3D11_LIBRARY_DBG} optimized ${OGRE_RenderSystem_Direct3D11_LIBRARY_REL}
-		debug ${OGRE_RenderSystem_GL_LIBRARY_DBG} optimized ${OGRE_RenderSystem_GL_LIBRARY_REL}
+	${DirectX9_LIBRARY}
+	${DirectX9_D3DX9_LIBRARY}
+	${DirectX9_DXERR_LIBRARY}
+	${DirectX9_DXGUID_LIBRARY}
+	debug ${OGRE_RenderSystem_Direct3D9_LIBRARY_DBG} optimized ${OGRE_RenderSystem_Direct3D9_LIBRARY_REL}
+	debug ${OGRE_RenderSystem_Direct3D11_LIBRARY_DBG} optimized ${OGRE_RenderSystem_Direct3D11_LIBRARY_REL}
+	debug ${OGRE_RenderSystem_GL_LIBRARY_DBG} optimized ${OGRE_RenderSystem_GL_LIBRARY_REL}
+	debug ${OGRE_LIBRARY_DBG} optimized ${OGRE_LIBRARY_REL}
+	${OPENGL_gl_LIBRARY} 
+	${OPENGL_glu_LIBRARY} 
+	debug ${Boost_SYSTEM_LIBRARY_DEBUG} optimized ${Boost_SYSTEM_LIBRARY_RELEASE}
+	debug ${Boost_THREAD_LIBRARY_DEBUG} optimized ${Boost_THREAD_LIBRARY_RELEASE}
+	debug ${Boost_ATOMIC_LIBRARY_DEBUG} optimized ${Boost_ATOMIC_LIBRARY_RELEASE}
+	debug ${Boost_CHRONO_LIBRARY_DEBUG} optimized ${Boost_CHRONO_LIBRARY_RELEASE}
+	debug ${Boost_DATE_TIME_LIBRARY_DEBUG} optimized ${Boost_DATE_TIME_LIBRARY_RELEASE}
+	debug ${FreeImage_LIBRARY_DBG} optimized ${FreeImage_LIBRARY_REL}
+	debug OIS_d optimized OIS
+	debug ${ZLIB_LIBRARY_DBG} optimized ${ZLIB_LIBRARY_REL}
+	debug ${ZZip_LIBRARY_DBG} optimized ${ZZip_LIBRARY_REL}
     )
 else()
     set( INCLUDE_DIRS
@@ -48,10 +62,40 @@ else()
     )
 
     set( LIBS
-		${X11_X11_LIB}
-		dl
-		pthread
-		debug ${OGRE_RenderSystem_GL_LIBRARY_DBG} optimized ${OGRE_RenderSystem_GL_LIBRARY_REL}
+	${DirectX9_LIBRARY}
+	${DirectX9_D3DX9_LIBRARY}
+	${DirectX9_DXERR_LIBRARY}
+	${DirectX9_DXGUID_LIBRARY}
+	debug ${OGRE_RenderSystem_GL_LIBRARY_DBG} optimized ${OGRE_RenderSystem_GL_LIBRARY_REL}
+	${X11_X11_LIB}
+	debug ${OGRE_LIBRARY_DBG} optimized ${OGRE_LIBRARY_REL}
+	dl
+	${OPENGL_gl_LIBRARY} 
+	${OPENGL_glu_LIBRARY} 
+	pthread
+	debug ${Boost_SYSTEM_LIBRARY_DEBUG} optimized ${Boost_SYSTEM_LIBRARY_RELEASE}
+	debug ${Boost_THREAD_LIBRARY_DEBUG} optimized ${Boost_THREAD_LIBRARY_RELEASE}
+	debug ${Boost_ATOMIC_LIBRARY_DEBUG} optimized ${Boost_ATOMIC_LIBRARY_RELEASE}
+	debug ${Boost_CHRONO_LIBRARY_DEBUG} optimized ${Boost_CHRONO_LIBRARY_RELEASE}
+	debug ${Boost_DATE_TIME_LIBRARY_DEBUG} optimized ${Boost_DATE_TIME_LIBRARY_RELEASE}
+	${X11_Xt_LIB}
+	debug ${FreeImage_LIBRARY_DBG} optimized ${FreeImage_LIBRARY_REL}
+	debug OIS_d optimized OIS
+	debug ${ZLIB_LIBRARY_DBG} optimized ${ZLIB_LIBRARY_REL}
+	debug ${ZZip_LIBRARY_DBG} optimized ${ZZip_LIBRARY_REL}
+	${X11_ICE_LIB}
+	${X11_SM_LIB}
+	${X11_Xext_LIB}
+	${X11_Xau_LIB}
+	${X11_Xdamage_LIB}
+	${X11_Xdmcp_LIB}
+	${X11_Xfixes_LIB}
+	${X11_Xmu_LIB}
+	${X11_Xpm_LIB}
+	${X11_Xrandr_LIB}
+	${X11_Xrender_LIB}
+	${X11_Xxf86vm_LIB}
+	${XAW_LIBRARY}
     )
 endif(WIN32)
 
@@ -77,22 +121,6 @@ add_executable(
 target_link_libraries( 
 	dcviewer 
 	${LIBS}
-	debug ${Boost_SYSTEM_LIBRARY_DEBUG} optimized ${Boost_SYSTEM_LIBRARY_RELEASE}
-	debug ${Boost_THREAD_LIBRARY_DEBUG} optimized ${Boost_THREAD_LIBRARY_RELEASE}
-	debug ${Boost_ATOMIC_LIBRARY_DEBUG} optimized ${Boost_ATOMIC_LIBRARY_RELEASE}
-	debug ${Boost_CHRONO_LIBRARY_DEBUG} optimized ${Boost_CHRONO_LIBRARY_RELEASE}
-	debug ${Boost_DATE_TIME_LIBRARY_DEBUG} optimized ${Boost_DATE_TIME_LIBRARY_RELEASE}
-	debug ${FreeImage_LIBRARY_DBG} optimized ${FreeImage_LIBRARY_REL}
-	debug OIS_d optimized OIS
-	debug ${ZLIB_LIBRARY_DBG} optimized ${ZLIB_LIBRARY_REL}
-	debug ${ZZip_LIBRARY_DBG} optimized ${ZZip_LIBRARY_REL}
-	${DirectX9_LIBRARY}
-	${DirectX9_D3DX9_LIBRARY}
-	${DirectX9_DXERR_LIBRARY}
-	${DirectX9_DXGUID_LIBRARY}
-	${OPENGL_gl_LIBRARY} 
-	${OPENGL_glu_LIBRARY} 
-	debug ${OGRE_LIBRARY_DBG} optimized ${OGRE_LIBRARY_REL}
 )
 
 IF( WIN32 )

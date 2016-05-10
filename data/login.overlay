@@ -1,0 +1,14 @@
+LoginOverlay
+{
+    zorder 200
+
+    container Panel(MyOverlayElements/TestPanel)
+    {
+		metrics_mode pixels
+        left 20
+        top 20
+        width 48
+        height 48
+        material ic_launcher
+    }
+}

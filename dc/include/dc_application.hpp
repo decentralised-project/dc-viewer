@@ -32,8 +32,8 @@
 #include <Overlay/OgreOverlaySystem.h>
 #include <Overlay/OgreOverlayManager.h>
 #include <Overlay/OgreOverlayContainer.h>
-#include "resource.h"
 #ifdef WIN32
+#include "resource.h"
 #include <OgreD3D9RenderSystem.h>
 #include <OgreD3D11RenderSystem.h>
 #endif

@@ -3,6 +3,7 @@ PROJECT( dc )
 
 set(CMAKE_MODULE_PATH
   "${CMAKE_SOURCE_DIR}/cmake"
+  "${CMAKE_SOURCE_DIR}/CMake"
 )
 
 add_subdirectory( dc )

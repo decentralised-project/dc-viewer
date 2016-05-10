@@ -18,9 +18,15 @@ set( OGRE_STATIC TRUE )
 # find_package( CEGUI )
 
 # Set up some path variables
+if (ROOT_OGRE STREQUAL "")
 set( ROOT_OGRE "${CMAKE_SOURCE_DIR}/../libs/ogre" CACHE PATH "Path to Ogre SDK directory" FORCE )
+endif()
+if (ROOT_DEPS STREQUAL "")
 set( ROOT_DEPS "${CMAKE_SOURCE_DIR}/../libs/deps" CACHE PATH "Path to Ogre dependencies directory" FORCE )
+endif()
+if (ROOT_BOOST STREQUAL "")
 set( ROOT_BOOST "${CMAKE_SOURCE_DIR}/../libs/boost" CACHE PATH "Path to boost directory" FORCE )
+endif()
 
 # Find root src files
 FILE( GLOB VIEWER_ROOT_INC_FILES "${CMAKE_SOURCE_DIR}/dc/include/*.hpp" )
@@ -28,6 +34,9 @@ FILE( GLOB VIEWER_ROOT_SRC_FILES "${CMAKE_SOURCE_DIR}/dc/src/*.cpp" )
 
 # Set up application resource files for Windows
 if(WIN32)
+
+find_package( DirectX )
+# find_package( DirectX11 )
 
 if (ROOT_DirectX9 STREQUAL "")
 set( ROOT_DirectX9 "C:/Program Files (x86)/Microsoft DirectX SDK (June 2010)" CACHE PATH "Path to DirectX June 2010 SDK directory" FORCE )
@@ -39,19 +48,28 @@ FILE( GLOB WINRES_FILES
 )
 endif(WIN32)
 
+find_package( OGRE )
+
 # Organise files into project folders
 source_group( "" FILES ${WINRES_FILES} )
 source_group( include FILES ${VIEWER_ROOT_INC_FILES} )
 source_group( src FILES ${VIEWER_ROOT_SRC_FILES} )
 
-find_package( DirectX )
-# find_package( DirectX11 )
-
-set( INCLUDE_DIRS
-	${ROOT_OGRE}/include/OGRE
+if(WIN32)
+set( RENDERER_INCLUDE_DIRS
 	${ROOT_OGRE}/include/OGRE/RenderSystems/Direct3D9
 	${ROOT_OGRE}/include/OGRE/RenderSystems/Direct3D11
 	${ROOT_OGRE}/include/OGRE/RenderSystems/GL
+)
+endif()
+set( RENDERER_INCLUDE_DIRS
+	${RENDERER_INCLUDE_DIRS}
+	${ROOT_OGRE}/include/OGRE/RenderSystems/GL
+)
+
+set( INCLUDE_DIRS
+	${OGRE_INCLUDE_DIR}
+	${RENDERER_INCLUDE_DIRS}
 	${ROOT_DEPS}/include/Cg
 	${ROOT_DEPS}/include/freetype
 	${ROOT_DEPS}/include/GL
@@ -104,6 +122,16 @@ if(WIN32)
 else()
 
     set( LIBS
+	debug OIS_d optimized OIS
+	debug libOgreMainStatic optimized libOgreMainStatic
+	debug zlib_d optimized zlib
+	debug zziplib_d optimized zziplib
+	debug freetype_d optimized freetype
+	debug FreeImage_d optimized FreeImage
+	debug libOgreOverlayStatic optimized libOgreOverlayStatic
+	debug ${Boost_THREAD_LIBRARY_DEBUG} optimized ${Boost_THREAD_LIBRARY_RELEASE}
+	debug ${Boost_ATOMIC_LIBRARY_DEBUG} optimized ${Boost_ATOMIC_LIBRARY_RELEASE}
+	debug ${Boost_DATE_TIME_LIBRARY_DEBUG} optimized ${Boost_DATE_TIME_LIBRARY_RELEASE}
     )
 endif(WIN32)
 

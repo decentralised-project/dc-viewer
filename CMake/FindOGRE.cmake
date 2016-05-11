@@ -31,7 +31,7 @@
 #  RenderSystem_GL, RenderSystem_GL3Plus,
 #  RenderSystem_GLES, RenderSystem_GLES2,
 #  RenderSystem_Direct3D9, RenderSystem_Direct3D11
-#  Paging, Terrain, Volume, Overlay, MeshLodGenerator, HLMS
+#  Paging, Terrain, Volume, Overlay
 #
 # For each of these components, the following variables are defined:
 #
@@ -148,7 +148,7 @@ else()
 endif ()
 
 # redo search if any of the environmental hints changed
-set(OGRE_COMPONENTS Paging Terrain Volume Overlay MeshLodGenerator HLMS
+set(OGRE_COMPONENTS Paging Terrain Volume Overlay 
   Plugin_BSPSceneManager Plugin_CgProgramManager Plugin_OctreeSceneManager
   Plugin_OctreeZone Plugin_PCZSceneManager Plugin_ParticleFX
   RenderSystem_Direct3D11 RenderSystem_Direct3D9 RenderSystem_GL RenderSystem_GL3Plus RenderSystem_GLES RenderSystem_GLES2)
@@ -254,109 +254,6 @@ endif()
 
 mark_as_advanced(OGRE_CONFIG_INCLUDE_DIR OGRE_MEDIA_DIR OGRE_PLUGIN_DIR_REL OGRE_PLUGIN_DIR_DBG)
 
-if (NOT OGRE_FOUND)
-  return()
-endif ()
-
-
-# look for required Ogre dependencies in case of static build and/or threading
-if (OGRE_STATIC)
-  set(OGRE_DEPS_FOUND TRUE)
-  find_package(Cg QUIET)
-  find_package(DirectX QUIET)
-  find_package(DirectX11 QUIET)
-  find_package(FreeImage QUIET)
-  find_package(Freetype QUIET)
-  find_package(OpenGL QUIET)
-  find_package(OpenGLES QUIET)
-  find_package(OpenGLES2 QUIET)
-  find_package(ZLIB QUIET)
-  find_package(ZZip QUIET)
-  if (UNIX AND NOT APPLE AND NOT ANDROID)
-    find_package(X11 QUIET)
-    find_library(XAW_LIBRARY NAMES Xaw Xaw7 PATHS ${DEP_LIB_SEARCH_DIR} ${X11_LIB_SEARCH_PATH})
-    if (NOT XAW_LIBRARY OR NOT X11_Xt_FOUND)
-      set(X11_FOUND FALSE)
-    endif ()
-  endif ()
-
-  set(OGRE_LIBRARIES ${OGRE_LIBRARIES} ${ZZip_LIBRARIES} ${ZLIB_LIBRARIES} ${FreeImage_LIBRARIES} ${FREETYPE_LIBRARIES})
-
-  if (APPLE AND NOT OGRE_BUILD_PLATFORM_APPLE_IOS AND NOT ANDROID)
-    set(OGRE_LIBRARIES ${OGRE_LIBRARIES} ${X11_LIBRARIES} ${X11_Xt_LIBRARIES} ${XAW_LIBRARY} ${X11_Xrandr_LIB} ${Carbon_LIBRARIES} ${Cocoa_LIBRARIES})
-  endif()
-  
-  if (NOT ZLIB_FOUND OR NOT ZZip_FOUND)
-    set(OGRE_DEPS_FOUND FALSE)
-  endif ()
-  if (NOT FreeImage_FOUND AND NOT OGRE_CONFIG_FREEIMAGE)
-    set(OGRE_DEPS_FOUND FALSE)
-  endif ()
-  if (NOT FREETYPE_FOUND)
-    set(OGRE_DEPS_FOUND FALSE)
-  endif ()
-  if (UNIX AND NOT APPLE AND NOT ANDROID)
-	if (NOT X11_FOUND)
-      set(OGRE_DEPS_FOUND FALSE)
-	endif ()
-  endif ()
-endif()
-  if (OGRE_CONFIG_THREADS)
-    if (OGRE_CONFIG_THREAD_PROVIDER EQUAL 1)
-      if (OGRE_STATIC)
-    	set(Boost_USE_STATIC_LIBS TRUE)
-    	if(OGRE_BUILD_PLATFORM_APPLE_IOS)
-          set(Boost_USE_MULTITHREADED OFF)
-        endif()
-      endif()
-      
-      set(OGRE_BOOST_COMPONENTS thread date_time)
-      find_package(Boost COMPONENTS ${OGRE_BOOST_COMPONENTS} QUIET)
-      if(Boost_FOUND AND Boost_VERSION GREATER 104900)
-        if(Boost_VERSION GREATER 105300)
-            set(OGRE_BOOST_COMPONENTS thread date_time system atomic chrono)
-        else()
-            set(OGRE_BOOST_COMPONENTS thread date_time system chrono)
-        endif()
-      endif()
-
-      find_package(Boost COMPONENTS ${OGRE_BOOST_COMPONENTS} QUIET)
-      if (NOT Boost_THREAD_FOUND)
-        set(OGRE_DEPS_FOUND FALSE)
-      else ()
-        set(OGRE_LIBRARIES ${OGRE_LIBRARIES} ${Boost_LIBRARIES})
-        set(OGRE_INCLUDE_DIRS ${OGRE_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
-      endif ()
-    elseif (OGRE_CONFIG_THREAD_PROVIDER EQUAL 2)
-      find_package(POCO QUIET)
-      if (NOT POCO_FOUND)
-        set(OGRE_DEPS_FOUND FALSE)
-      else ()
-        set(OGRE_LIBRARIES ${OGRE_LIBRARIES} ${POCO_LIBRARIES})
-        set(OGRE_INCLUDE_DIRS ${OGRE_INCLUDE_DIRS} ${POCO_INCLUDE_DIRS})
-      endif ()
-    elseif (OGRE_CONFIG_THREAD_PROVIDER EQUAL 3)
-      find_package(TBB QUIET)
-      if (NOT TBB_FOUND)
-        set(OGRE_DEPS_FOUND FALSE)
-      else ()
-        set(OGRE_LIBRARIES ${OGRE_LIBRARIES} ${TBB_LIBRARIES})
-        set(OGRE_INCLUDE_DIRS ${OGRE_INCLUDE_DIRS} ${TBB_INCLUDE_DIRS})
-      endif ()
-    endif ()
-  endif ()
-if (OGRE_STATIC)
-  if (NOT OGRE_DEPS_FOUND)
-    pkg_message(OGRE "Could not find all required dependencies for the Ogre package.")
-    set(OGRE_FOUND FALSE)
-  endif ()
-endif ()
-
-if (NOT OGRE_FOUND)
-  return()
-endif ()
-
-
 get_filename_component(OGRE_LIBRARY_DIR_REL "${OGRE_LIBRARY_REL}" PATH)
 get_filename_component(OGRE_LIBRARY_DIR_DBG "${OGRE_LIBRARY_DBG}" PATH)
 set(OGRE_LIBRARY_DIRS ${OGRE_LIBRARY_DIR_REL} ${OGRE_LIBRARY_DIR_DBG})
@@ -389,7 +286,6 @@ set(OGRE_COMPONENT_SEARCH_PATH_DBG
 )
 
 macro(ogre_find_component COMPONENT HEADER)
-  set(OGRE_${COMPONENT}_FIND_QUIETLY ${OGRE_FIND_QUIETLY})
   findpkg_begin(OGRE_${COMPONENT})
   find_path(OGRE_${COMPONENT}_INCLUDE_DIR NAMES ${HEADER} HINTS ${OGRE_INCLUDE_DIRS} ${OGRE_PREFIX_SOURCE} PATH_SUFFIXES ${COMPONENT} OGRE/${COMPONENT} Components/${COMPONENT}/include)
   set(OGRE_${COMPONENT}_LIBRARY_NAMES "Ogre${COMPONENT}${OGRE_LIB_SUFFIX}")
@@ -408,7 +304,6 @@ macro(ogre_find_component COMPONENT HEADER)
 	  mark_as_advanced(OGRE_${COMPONENT}_BINARY_REL OGRE_${COMPONENT}_BINARY_DBG)
     endif()
   endif()
-  unset(OGRE_${COMPONENT}_FIND_QUIETLY)
 endmacro()
 
 # look for Paging component
@@ -423,10 +318,6 @@ ogre_find_component(RTShaderSystem OgreRTShaderSystem.h)
 ogre_find_component(Volume OgreVolumePrerequisites.h)
 # look for Overlay component
 ogre_find_component(Overlay OgreOverlaySystem.h)
-# look for MeshLodGenerator component
-ogre_find_component(MeshLodGenerator OgreMeshLodGenerator.h)
-# look for HLMS component
-ogre_find_component(HLMS OgreHlmsManager.h)
 
 #########################################################
 # Find Ogre plugins
@@ -454,9 +345,9 @@ macro(ogre_find_plugin PLUGIN HEADER)
   get_debug_names(OGRE_${PLUGIN}_LIBRARY_NAMES)
   set(OGRE_${PLUGIN}_LIBRARY_FWK ${OGRE_LIBRARY_FWK})
   find_library(OGRE_${PLUGIN}_LIBRARY_REL NAMES ${OGRE_${PLUGIN}_LIBRARY_NAMES}
-    HINTS "${OGRE_BUILD}/lib" ${OGRE_LIBRARY_DIRS} ${OGRE_FRAMEWORK_PATH} PATH_SUFFIXES "" OGRE OGRE-${OGRE_VERSION} opt Release Release/opt RelWithDebInfo RelWithDebInfo/opt MinSizeRel MinSizeRel/opt)
+    HINTS "${OGRE_BUILD}/lib" ${OGRE_LIBRARY_DIRS} ${OGRE_FRAMEWORK_PATH} PATH_SUFFIXES "" OGRE opt Release Release/opt RelWithDebInfo RelWithDebInfo/opt MinSizeRel MinSizeRel/opt)
   find_library(OGRE_${PLUGIN}_LIBRARY_DBG NAMES ${OGRE_${PLUGIN}_LIBRARY_NAMES_DBG}
-    HINTS "${OGRE_BUILD}/lib" ${OGRE_LIBRARY_DIRS} ${OGRE_FRAMEWORK_PATH} PATH_SUFFIXES "" OGRE OGRE-${OGRE_VERSION} opt Debug Debug/opt)
+    HINTS "${OGRE_BUILD}/lib" ${OGRE_LIBRARY_DIRS} ${OGRE_FRAMEWORK_PATH} PATH_SUFFIXES "" OGRE opt Debug Debug/opt)
   make_library_set(OGRE_${PLUGIN}_LIBRARY)
 
   if (OGRE_${PLUGIN}_LIBRARY OR OGRE_${PLUGIN}_INCLUDE_DIR)
@@ -526,7 +417,7 @@ ogre_find_plugin(RenderSystem_Direct3D11 OgreD3D11RenderSystem.h RenderSystems/D
         
 if (OGRE_STATIC)
   # check if dependencies for plugins are met
-  if (NOT DirectX9_FOUND)
+  if (NOT DirectX_FOUND)
     set(OGRE_RenderSystem_Direct3D9_FOUND FALSE)
   endif ()
   if (NOT DirectX_D3D11_FOUND)
@@ -549,7 +440,7 @@ if (OGRE_STATIC)
   endif ()
   
   set(OGRE_RenderSystem_Direct3D9_LIBRARIES ${OGRE_RenderSystem_Direct3D9_LIBRARIES}
-    ${DirectX9_LIBRARIES}
+    ${DirectX_LIBRARIES}
   )
 
   set(OGRE_RenderSystem_Direct3D11_LIBRARIES ${OGRE_RenderSystem_Direct3D11_LIBRARIES}

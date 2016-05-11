@@ -32,7 +32,7 @@ namespace DC {
 			"dc.log");
 
 		// TODO: Make data directory configurable
-		mRoot->addResourceLocation("X:/build/Debug/data", "FileSystem");
+		mRoot->addResourceLocation("./data", "FileSystem");
 
 #ifdef WIN32
 		//Ogre::D3D11RenderSystem* renderer = new Ogre::D3D11RenderSystem();

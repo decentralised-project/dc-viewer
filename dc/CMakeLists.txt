@@ -25,6 +25,14 @@ find_package( Freetype )
 find_package( FreeImage )
 find_package( DirectX )
 find_package( OGRE )
+find_package( OpenGL )
+
+if( UNIX AND NOT APPLE AND NOT ANDROID )
+    find_package( X11 )
+    find_library(XAW_LIBRARY NAMES Xaw Xaw7 PATHS ${DEP_LIB_SEARCH_DIR} ${X11_LIB_SEARCH_PATH})
+    find_package( Threads )
+    find_package( DL )
+endif()
 
 # Find root src files
 FILE( GLOB VIEWER_ROOT_INC_FILES "${CMAKE_SOURCE_DIR}/dc/include/*.hpp" )
@@ -48,8 +56,6 @@ source_group( src FILES ${VIEWER_ROOT_SRC_FILES} )
 
 set( INCLUDE_DIRS
 	${OGRE_INCLUDE_DIR}
-	${OGRE_RenderSystem_Direct3D9_INCLUDE_DIR}
-	${OGRE_RenderSystem_Direct3D11_INCLUDE_DIR}
 	${OGRE_RenderSystem_GL_INCLUDE_DIR}
 	${Cg_INCLUDE_DIR}
 	${FREETYPE_INCLUDE_DIR}
@@ -58,6 +64,7 @@ set( INCLUDE_DIRS
 	${FreeImage_INCLUDE_DIR}
 	${DirectX9_INCLUDE_DIR}
 	${Boost_INCLUDE_DIR}
+	${OPENGL_INCLUDE_DIR}
 	"${CMAKE_SOURCE_DIR}/dc/include"
 	"${CMAKE_SOURCE_DIR}/dc/src/Win32"
 )
@@ -77,35 +84,67 @@ set( LIB_DIRS_DBG
 	${ROOT_BOOST}/lib
 )
 
-set( LIBS
+if(WIN32)
+    set( LIBS
 	debug ${OIS_LIBRARY_DBG} optimized ${OIS_LIBRARY_REL}
 	debug ${OGRE_LIBRARY_DBG} optimized ${OGRE_LIBRARY_REL}
 	debug ${ZLIB_LIBRARY_DBG} optimized ${ZLIB_LIBRARY_REL}
 	debug ${ZZip_LIBRARY_DBG} optimized ${ZZip_LIBRARY_REL}
 	debug ${FREETYPE_LIBRARY_DBG} optimized ${FREETYPE_LIBRARY_REL}
 	debug ${FreeImage_LIBRARY_DBG} optimized ${FreeImage_LIBRARY_REL}
-	debug ${OGRE_RenderSystem_Direct3D9_LIBRARY_DBG} optimized ${OGRE_RenderSystem_Direct3D9_LIBRARY_REL}
-	debug ${OGRE_RenderSystem_Direct3D11_LIBRARY_DBG} optimized ${OGRE_RenderSystem_Direct3D11_LIBRARY_REL}
-	debug ${OGRE_RenderSystem_Direct3D11_LIBRARY_DBG} optimized ${OGRE_RenderSystem_Direct3D11_LIBRARY_REL}
 	debug ${OGRE_Overlay_LIBRARY_DBG} optimized ${OGRE_Overlay_LIBRARY_REL}
 	debug ${Boost_THREAD_LIBRARY_DEBUG} optimized ${Boost_THREAD_LIBRARY_RELEASE}
 	debug ${Boost_SYSTEM_LIBRARY_DEBUG} optimized ${Boost_SYSTEM_LIBRARY_RELEASE}
 	debug ${Boost_DATE_TIME_LIBRARY_DEBUG} optimized ${Boost_DATE_TIME_LIBRARY_RELEASE}
 	debug ${Boost_CHRONO_LIBRARY_DEBUG} optimized ${Boost_CHRONO_LIBRARY_RELEASE}
+	debug ${OGRE_RenderSystem_Direct3D9_LIBRARY_DBG} optimized ${OGRE_RenderSystem_Direct3D9_LIBRARY_REL}
+	debug ${OGRE_RenderSystem_Direct3D11_LIBRARY_DBG} optimized ${OGRE_RenderSystem_Direct3D11_LIBRARY_REL}
 	${DirectX9_LIBRARY}
 	${DirectX9_D3DX9_LIBRARY}
 	${DirectX9_DXERR_LIBRARY}
 	${DirectX9_DXGUID_LIBRARY}
-)
-
-if(WIN32)
-    set( LIBS ${LIBS}
 	d3d11
 	dxgi
     )
-#else()
-#    set( LIBS ${LIBS}
-#    )
+    set( INCLUDE_DIRS ${INCLUDE_DIRS}
+	${OGRE_RenderSystem_Direct3D9_INCLUDE_DIR}
+	${OGRE_RenderSystem_Direct3D11_INCLUDE_DIR}
+    )
+else()
+    set( LIBS
+	debug ${OIS_LIBRARY_DBG} optimized ${OIS_LIBRARY_REL}
+	debug ${ZLIB_LIBRARY_DBG} optimized ${ZLIB_LIBRARY_REL}
+	debug ${Boost_SYSTEM_LIBRARY_DEBUG} optimized ${Boost_SYSTEM_LIBRARY_RELEASE}
+	debug ${Boost_DATE_TIME_LIBRARY_DEBUG} optimized ${Boost_DATE_TIME_LIBRARY_RELEASE}
+	debug ${Boost_CHRONO_LIBRARY_DEBUG} optimized ${Boost_CHRONO_LIBRARY_RELEASE}
+	${BOOST_THREAD_LIBRARY}
+	debug ${OGRE_Overlay_LIBRARY_DBG} optimized ${OGRE_Overlay_LIBRARY_REL}
+	debug ${OGRE_RenderSystem_GL_LIBRARY_DBG} optimized ${OGRE_RenderSystem_GL_LIBRARY_REL}
+	debug ${OGRE_LIBRARY_DBG} optimized ${OGRE_LIBRARY_REL}
+	${X11_X11_LIB}
+	${X11_Xt_LIB}
+	${DL_LIBRARIES}
+	${OPENGL_gl_LIBRARY}
+	${OPENGL_glu_LIBRARY}
+	debug ${Boost_THREAD_LIBRARY_DEBUG} optimized ${Boost_THREAD_LIBRARY_RELEASE}
+	pthread
+	${XAW_LIBRARY}
+	debug ${ZZip_LIBRARY_DBG} optimized ${ZZip_LIBRARY_REL}
+	debug ${FREETYPE_LIBRARY_DBG} optimized ${FREETYPE_LIBRARY_REL}
+	debug ${FreeImage_LIBRARY_DBG} optimized ${FreeImage_LIBRARY_REL}
+	${X11_ICE_LIB}
+ 	${X11_SM_LIB}
+ 	${X11_Xext_LIB}
+ 	${X11_Xau_LIB}
+ 	${X11_Xdamage_LIB}
+ 	${X11_Xdmcp_LIB}
+ 	${X11_Xfixes_LIB}
+ 	${X11_Xmu_LIB}
+ 	${X11_Xpm_LIB}
+ 	${X11_Xrandr_LIB}
+ 	${X11_Xrender_LIB}
+ 	${X11_Xxf86vm_LIB}
+    )
 endif(WIN32)
 
 include_directories( 

@@ -32,6 +32,7 @@ if( UNIX AND NOT APPLE AND NOT ANDROID )
     find_library(XAW_LIBRARY NAMES Xaw Xaw7 PATHS ${DEP_LIB_SEARCH_DIR} ${X11_LIB_SEARCH_PATH})
     find_package( Threads )
     find_package( DL )
+	find_package( POCO )
 endif()
 
 # Find root src files
@@ -65,6 +66,7 @@ set( INCLUDE_DIRS
 	${DirectX9_INCLUDE_DIR}
 	${Boost_INCLUDE_DIR}
 	${OPENGL_INCLUDE_DIR}
+	${POCO_INCLUDE_DIR}
 	"${CMAKE_SOURCE_DIR}/dc/include"
 	"${CMAKE_SOURCE_DIR}/dc/src/Win32"
 )
@@ -144,6 +146,7 @@ else()
  	${X11_Xrandr_LIB}
  	${X11_Xrender_LIB}
  	${X11_Xxf86vm_LIB}
+	debug ${POCO_LIBRARY_DBG} optimized ${POCO_LIBRARY_REL}
     )
 endif(WIN32)
 

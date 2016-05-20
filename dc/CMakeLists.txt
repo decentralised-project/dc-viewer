@@ -38,6 +38,7 @@ endif()
 # Find root src files
 FILE( GLOB VIEWER_ROOT_INC_FILES "${CMAKE_SOURCE_DIR}/dc/include/*.hpp" )
 FILE( GLOB VIEWER_ROOT_SRC_FILES "${CMAKE_SOURCE_DIR}/dc/src/*.cpp" )
+FILE( GLOB VIEWER_JNI_FILES "${CMAKE_SOURCE_DIR}/dc/src/Android/JNI/*.cpp" )
 
 # Set up application resource files for Windows
 if( WIN32 )
@@ -54,6 +55,7 @@ endif( WIN32 )
 source_group( "" FILES ${WINRES_FILES} )
 source_group( include FILES ${VIEWER_ROOT_INC_FILES} )
 source_group( src FILES ${VIEWER_ROOT_SRC_FILES} )
+source_group( src\\AndroidJNI FILES ${VIEWER_JNI_FILES} )
 
 set( INCLUDE_DIRS
 	${OGRE_INCLUDE_DIR}
@@ -69,6 +71,7 @@ set( INCLUDE_DIRS
 	${POCO_INCLUDE_DIR}
 	"${CMAKE_SOURCE_DIR}/dc/include"
 	"${CMAKE_SOURCE_DIR}/dc/src/Win32"
+	"${CMAKE_SOURCE_DIR}/dc/src/Android/JNI"
 )
 
 set( LIB_DIRS_REL
@@ -163,6 +166,7 @@ add_executable(
 	${VIEWER_ROOT_INC_FILES} 
 	${VIEWER_ROOT_SRC_FILES} 
 	${WINRES_FILES}
+	${VIEWER_JNI_FILES}
 )
 
 target_link_libraries( 
